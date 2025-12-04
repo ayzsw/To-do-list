@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To Do List (Community) Free</title>
+<link rel="icon" href="favicon.png?v=1" type="image/png">
+<link rel="apple-touch-icon" href="favicon.png?v=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="container">
+  <h1 class="header">To Do List (Community) <span class="badge">Free</span></h1>
+
+  <!-- Добавление задачи -->
+  <div class="add-box">
+    <div class="inputs">
+      <input type="text" id="titleInput" placeholder="Title..." autocomplete="off">
+      <input type="text" id="bodyInput" placeholder="About..." autocomplete="off">
+    </div>
+    <button id="addBtn" class="btn-orange">+</button>
+  </div>
+
+  <!-- Список задач -->
+  <div id="tasksContainer" class="tasks"></div>
+
+  <div id="noTasks" class="no-tasks">No Tasks</div>
+</div>
+
+<!-- Модалка редактирования -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <input type="text" id="editTitle" placeholder="Title..." class="title-input" />
+    <input type="text" id="editBody" placeholder="About..." class="body-input" />
+    <div class="modal-buttons">
+      <button id="cancelEdit">Cancel</button>
+      <button id="saveEdit">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
