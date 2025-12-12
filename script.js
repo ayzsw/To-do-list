@@ -14,26 +14,43 @@ const saveEdit = document.getElementById('saveEdit');
 const cancelEdit = document.getElementById('cancelEdit');
 
 let tasks = [];
-let currentEditIndex = null; // будем хранить индекс в массиве
+let currentEditIndex = null; 
 
+// --- ИСПРАВЛЕННАЯ ФУНКЦИЯ ЗАГРУЗКИ (ПРИОРИТЕТ: localStorage) ---
 async function loadTasks() {
-  try {
-    const res = await fetch(`${API_BASE}/todos?userId=${USER_ID}`);
-    const data = await res.json();
-    tasks = data.map(t => ({ id: t.id, title: t.title, body: '' })); // body пустой, т.к. API его не даёт
-  } catch (e) {
-    console.error('API недоступен → локальное хранилище');
-    const saved = localStorage.getItem('tasks');
-    if (saved) tasks = JSON.parse(saved);
+  const saved = localStorage.getItem('tasks');
+    
+  if (saved) {
+    // 1. Если данные есть в localStorage, берем их оттуда
+    try {
+      tasks = JSON.parse(saved);
+    } catch (e) {
+      console.error('Ошибка парсинга локального хранилища:', e);
+      tasks = [];
+    }
+    
+  } else {
+    // 2. Если в localStorage пусто, пытаемся получить данные из API
+    try {
+      const res = await fetch(`${API_BASE}/todos?userId=${USER_ID}`);
+      const data = await res.json();
+      
+      // Форматируем данные API и сохраняем их как начальный набор
+      tasks = data.map(t => ({ id: t.id, title: t.title, body: '' })); 
+      saveToLocal(); // Сохраняем начальные данные, чтобы больше не обращаться к API
+      
+    } catch (e) {
+      console.error('API недоступен и локальное хранилище пусто. Список задач пуст.');
+      tasks = [];
+    }
   }
   render();
 }
+// -----------------------------------------------------------------
 
 function saveToLocal() {
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
-
-// ... весь твой старый код до render() остаётся тем же
 
 function render() {
   tasksContainer.innerHTML = '';
